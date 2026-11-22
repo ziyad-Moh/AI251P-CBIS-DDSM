@@ -1,0 +1,28 @@
+# KHALAF Team — Capstone Phase 2 (M4, M5, M8): CBIS-DDSM mass detection and segmentation
+
+Continues the Phase 1 project (CBIS-DDSM, benign vs. malignant).
+
+| Path | Content |
+|:--|:--|
+| `KHALAF_Team_Phase2_Report.pdf` | Phase 2 report (template sections, results, verdict, self-assessment) |
+| `KHALAF_Team_Phase2_Summary.pdf` | Two-page summary: before, during and after training |
+| `notebooks/KHALAF_CBIS_Phase2.ipynb` | The whole pipeline: data, M4, M5, classifier, M8 (Colab, T4 GPU, Run all) |
+| `results/` | `results.json` (all numbers), acceptance criteria, config, split and per-image results |
+| `figures/` | All figures used in the report |
+| `runs/` | YOLO training log (`results.csv`, `args.yaml`) |
+| `deployment/models/` | `segmenter.onnx` (YOLO11n-seg), `classifier.onnx` (ResNet-18), PyTorch weights |
+| `deployment/service/` | FastAPI service (`app.py`, `pipeline.py`, `manifest.json` with SHA-256), README |
+| `report/` | LaTeX source of the report |
+| `DATASET_CARD.md`, `audit_sample.csv`, `requirements.txt` | Data documentation, mask audit sample, package versions |
+
+## Run the notebook
+Open `notebooks/KHALAF_CBIS_Phase2.ipynb` in Colab, choose a T4 GPU, add `KAGGLE_USERNAME` and `KAGGLE_KEY` in Colab Secrets (or upload `kaggle.json` to the files panel), then Runtime → Run all.
+
+## Run the service
+```bash
+cd deployment/service
+pip install -r requirements.txt
+RELEASE_DIR=. uvicorn app:app --port 8000
+curl -X POST -F "file=@mammogram.jpg" http://localhost:8000/predict
+```
+No images or patient data are included. Academic exercise only; not for diagnosis, screening or triage.
